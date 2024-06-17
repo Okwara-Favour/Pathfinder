@@ -1,4 +1,5 @@
 ********************************************************Pathfinder******************************************************************
+
 Summary:
 An interactive web application for visualizing pathfinding algorithms on provided environment maps,
 and user-generated maps. Why User Generated? The app has a blank environment map to which users can draw on it and
