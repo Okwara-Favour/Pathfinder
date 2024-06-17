@@ -27,16 +27,20 @@ e.g Start: 0,0 .............. End: 4,4. This example uses the first map, Basic M
 
 Mouse:
 Step 1:
-Hover mouse on the canvas
-3 clicks and I'm home - [https://genius.com/Phoebe-bridgers-i-know-the-end-lyrics]
+Hover mouse on the canvas.
+
+Step 2:
+3 clicks
+
 1. Set start position on any cell of the grid map.
 2. Set end position an any cell that is of the same color as the start position cell.
 3. Reset.
 
-To Drag
-Step 1. Enable drag by clicking on toggleDrag button
-Step 2. After the 2nd click which sets the end position, or after manually setting the positions on the text input box for
+To Drag:
+
+1. Enable drag by clicking on toggleDrag button.
+2. After the 2nd click which sets the end position, or after manually setting the positions on the text input box for
 start position and end, by hovering mouse around, the end position automatically changes and new searches will be made.
-Step 3. Click the 3rd time to reset, click toggleDrag again if enabled to disable.
+3. Click the 3rd time to reset, click toggleDrag again if enabled to disable.
 
  
