@@ -1,0 +1,246 @@
+<html>
+    <head>
+        <title>PathFinder</title>
+        <style>
+          #container {
+              display: flex;
+              flex-direction: column; /* Stack children vertically */
+              position: absolute;
+              margin-left: 50%;
+              top: 10px;
+          }
+          #controls {
+              margin-right: 10px;
+          }
+          #historyTable tr
+          {
+            display: flex;
+          }
+          #historyTable td
+          {
+            padding-left: 2px;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+          #mapSelector, #algorithmSelector, #visual, #action {
+              width: 200px;
+              background-color: rgb(210, 210, 210);
+          }
+          #start, #end, #dwidth, #dheight {width: 120px;}
+          #size, #colors {width: 70px;}
+          #distanceFinder, #run, #dcreate, #pmode, #toggleGrid, #toggleDrag, #toggleNext {width: 150px;}
+          #distanceFinder {background-color: rgb(210, 210, 210);}
+      </style>
+    </head>
+    <body>
+      <div>
+        <canvas id="canvas" style="border:1px solid #000000;"></canvas>
+      </div>  
+      <script type="text/javascript" src="JS/Vec2.js"></script>
+      <script type="text/javascript" src="JS/Canvas.js"></script>
+      <script type="text/javascript" src="JS/Grid.js"></script>
+      <script type="text/javascript" src="JS/PriorityQueue.js"></script>
+      <script type="text/javascript" src="JS/Search.js"></script>
+      <script type="text/javascript" src="JS/Pathhistory.js"></script>
+      <script type="text/javascript" src="JS/GridMap.js"></script>
+      <script type="text/javascript" src="JS/GUI.js"></script>
+
+      <div id="container">
+        <table id="controls">
+          <tr>
+            <td>Environment Map:</td>
+            <td>
+              <select id="mapSelector">
+                <option value="BasicMap">Basic Map</option>
+                <option value="BlankMap">Blank Map</option>
+                <option value="SimpleMaze">Simple Maze</option>
+                <option value="LargeMaze">Large Maze</option>
+                <option value="OnelishMaze">Onelish Maze</option>
+                <option value="DeveloperMaze">Developer Maze</option>
+              </select>
+            </td>
+            <td><button id="toggleGrid">toggleGrid</button></td>
+          </tr>
+          <tr>
+            <td>Search Algorithm:</td>
+            <td>
+              <select id="algorithmSelector">
+                <option value="bfs">BFS</option>
+                <option value="dfs">DFS</option>
+                <option value="dijikstra">Dijikstra</option>
+                <option value="astar">A*</option>
+                <option value="gbefs">GBeFS</option>
+              </select>
+            </td>
+            <td>
+              <select id="distanceFinder">
+                <option value="None">None</option>
+                <option value="EC">Euclidean</option>
+                <option value="CMC">Card. Manhattan</option>
+                <option value="DMC">Diag. Manhattan</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Visualization:</td>
+            <td>
+              <select id="visual">
+                <option value="instant">Instant</option>
+                <option value="animate">Animation</option>
+                <option value="debug">Debug</option>
+              </select>
+            </td>
+            <td><button id="toggleNext">next</button></td>
+          </tr>
+          <tr>
+            <td>Actions:</td>
+            <td>
+              <select id="action">
+                <option value="UDLR">Up down left right</option>
+                <option value="DIAG">All directions</option>
+              </select>
+            </td>
+            <td><button id="toggleDrag">toggleDrag</button></td>
+          </tr>
+          <tr>
+            <td>W:
+              <input type="text" id="dwidth">
+            </td>
+            <td>H:
+              <input type="text" id="dheight">
+            </td>
+            <td><button id="dcreate">Create</button></td>
+          </tr>
+          <tr>
+            <td> 
+              Size:
+              <select id="size">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </td>
+            <td>
+              Colors:
+              <select id="colors">
+                <option value="gray">Gray</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+              </select>
+            </td>
+            <td><button id="pmode">Place Mode</button></td>
+          </tr>
+          <tr>
+            <td>S:
+              <input type="text" id="start">
+            </td>
+            <td>E:
+              <input type="text" id="end">
+            </td>
+            <td><button id="run">Run</button></td>
+          </tr>
+        </table>
+
+        <table id = "historyTable">  
+        </table>
+      </div>
+
+<textarea id = "BlankMap" style = "display: none;">
+22222
+22222
+22222
+22222
+22222</textarea>
+<textarea id = "BasicMap" style = "display: none;">
+00003
+00000
+00200
+00220
+00000</textarea>
+<textarea id = "SimpleMaze" style="display: none;">
+232222222222222
+233333333333332
+222222222223232
+233323332333232
+232323232322232
+232333232323332
+232222232322232
+232323332333232
+232323222323232
+232333233323232
+232223222223232
+232323333333232
+232322222222232
+233323333333332
+222222222222232 </textarea>
+
+<textarea id = "LargeMaze" style="display: none;">
+23222222222222222222222222222222222222222
+23333333233333333333333323332333333323332
+23232223222223222222222323232223222323232
+23233323333323333333332333233333233323232
+22222322222322222322232322222222232223222
+23333323333323332333232323333323332333332
+23222223222223232222232223222323222222232
+23332333333333233333332333233323233333332
+23232222222222222222222322232223232222232
+23232333333323333333233323233323332333232
+23232322222323222223232223222322222223232
+23232333233323332333233323332333333323332
+22232223232322232322222322232222222322232
+23332333232323332333332333333333332333232
+23222322232323222222232222222222232223222
+23233323332323233323233323333323233323332
+23232223222223232323232223232323222322232
+23232323333323332323233333232333232333232
+23232322222322222323222222232223232223232
+23232333332333332333233333232333332333232
+23232222232322232223232323232222222322232
+23232333232323332323232323232333333333232
+23232323232322232323222323232322222222232
+23232323232333233323332323233323333323332
+23232323232223222222232323222223222222222
+23332323332323333333332323232333333333332
+23222322232322222222222323232322222322222
+23233333232333332333333323233323333323332
+23222223232323222322222323222223222223232
+23332333233323233323333323333323233323232
+22232322222222232223222222222323232323232
+23232333333333332323333333233333232333232
+23232222222223222322222223222223232222232
+23332333333323233333333323333323232333232
+23222322222323222222232222222322232323232
+23333323333323333333332333332333333323232
+22222223222222222222222322232223222222232
+23333323333333333333233323233323332333232
+23232222222222222223232223222322222323232
+23233333333333333333332333333333333323332
+22222222222222222222222222222222222222232 </textarea>
+
+<textarea id = "OnelishMaze" style="display: none;">
+2323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232
+2323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232
+2323332333333333333333333333332333333333333333333323333333333333333333333333333333333333333333333323333333232
+2323332333232323232323232323332333232323232333233323232323233323232323232323232323232323232323233323332333232
+2323332333333323332333333333332333233333333333233333333333333323333333233333333333333333332333233323332333232
+2323332323233323332333232323232323233323232323232323232323232323332323233323232323233323332333233323332333232
+2323333333333323332333333333333333233323333333333323333333233333333333333323333333333323333333233323332333232
+2323232323232323332323232323232333233323332323233323332333232323332323232323332323232323232333233323232333232
+2323333333333333332333333333333333233333333333233333332333333323333333233333332333333323333333233333332333232
+2323332323232323232333232323232323232323232323232323232323233323232323233323232333232323332323232323332333232
+2323333333333333333333233333332333333333333333233333333333333323333333333323333333233333332333333333332333232
+2323332323232323232323233323332333233323232333233323232323232323332323232323332323233323232333232323232333232
+2323333333333333332333333323332333233323333333233323333333233333332333333333332333333333332333233333332333232
+2323232323232323332323233323332333233323332323233323332323233323332323232323332333232323232333233323332333232
+2323332333333323333333333323332333233323333333333323332333333323332333333323333333233323333333233323333333232
+2323332333233323232323232323332323233323232323232323332333232323332333233323332323233323332323233323232333232
+2323333333233333333333333323333333233323333333333333333333233323333333233323333333333323332333333323332333232
+2323332323232323232333232323232333233323332323232323232323233323232323233323232323233323332333232323332333232
+2323332333333333332333233333332333233323333333333333333333233333332333333323333333233323332333333323332333232
+2323332333232323332333233323332333233323232323232323232333232323332333232323332333232323332323233323332333232
+2323333333233333332333333323333333333323333333333333333333333333332333333333332333333333333333333323333333232
+2323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232
+2323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232</textarea>
+<textarea id = "DeveloperMaze" style="display: none;"></textarea>
+    </body>
+</html>
