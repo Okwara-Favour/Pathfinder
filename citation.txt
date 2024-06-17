@@ -1,3 +1,5 @@
 Onelish maze visual
 -Oneilsh [https://github.com/oneilsh/rstackdeque_examples/blob/master/maze.txt]
 
+Visual, idea, knowledge
+-Dave Churchill, Intro to AI [https://www.youtube.com/watch?v=AzUZiUz-Wpc&list=PL_xRyXins84-dTmpL68AKv7UFAEvIeIr1&index=1]
