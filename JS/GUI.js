@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Mck.dcreate.disabled = true;
     Mis.colors.disabled = true;
     Mis.pmode.disabled = true;
+    Vis.toggleNext.disabled = true;
 
     Env.toggleGrid.addEventListener('click', () => {gridMap.toggleGrid = !gridMap.toggleGrid;});
     Ack.toggleDrag.addEventListener('click', () => {hasToggleDrag = !hasToggleDrag;});
@@ -130,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     Vis.visual.addEventListener('change', (event) => {
         selectedSType = event.target.value;
+        if(selectedSType == 'debug') {Vis.toggleNext.disabled = false;}
+        else {Vis.toggleNext.disabled = true;}
         gridMap.solutionType = selectedSType;
         gridMap.resetSearch();
     });
