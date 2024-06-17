@@ -1,4 +1,4 @@
-=Pathfinder
+==================================================================Pathfinder==========================================================
 
 Summary:
 An interactive web application for visualizing pathfinding algorithms on provided environment maps,
