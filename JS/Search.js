@@ -108,6 +108,9 @@ class Search
                 let hCost = this.estimateCost(nVec, this.end) * 100;
                 let newNode = new Node(nVec, node, value, gCost, hCost);
                 if(this.config.strategy == "bfs" || this.config.strategy == "dfs") {fringe.push(newNode);}
+                else if(this.config.strategy == "dijikstra") {
+                    enqueue(fringe, new Node(nVec, node, value, gCost, 0));
+                }
                 else if(this.config.strategy == "gbefs") {
                     enqueue(fringe, new Node(nVec, node, value, 0, hCost));
                 }
